@@ -115,5 +115,5 @@
 }
 @media (max-width: 700px) {
   .hero { min-height: 0; padding-bottom: 32px; }
-  .hero .hero-process { width: 100%; height: auto; top: auto; aspect-ratio: auto; min-height: 0; margin-block: 20px 22px; overflow: visible; }
+  .hero .hero-process { width: 100%; height: auto; top: auto; aspect-ratio: auto; min-height: 0; margin-block: 0 22px; overflow: visible; }
 }

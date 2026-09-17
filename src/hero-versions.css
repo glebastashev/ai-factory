@@ -27,7 +27,7 @@
   .hero-alternative { grid-column: 1; grid-row: 2; width: min(100%, 620px); margin-inline: auto; }
 }
 @media (max-width: 700px) {
-  .hero.hero--alternative { gap: 32px; padding-block: 28px 40px; }
+  .hero.hero--alternative { gap: 8px; padding-block: 28px 40px; }
   .hero--alternative h1 { font-size: clamp(24px, 7.8vw, 47px); letter-spacing: -1.35px; }
   .hero--alternative .hero-description { font-size: 15px; }
   .hero--alternative .hero-eyebrow { font-size: 13px; }

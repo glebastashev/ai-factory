@@ -1,0 +1,168 @@
+/* Font files and roles from the recent commercial presentation, build-v4.py. */
+@font-face {
+  font-family: 'Unbounded';
+  src: url('/fonts/Unbounded-variable.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 499;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 500 900;
+  font-display: swap;
+}
+
+:root { font-family: 'JetBrains Mono', monospace; --font-heading: 'Unbounded', sans-serif; }
+h1, h2, h3, .brand, .financial-fieldset legend,
+.case-metric strong, .financial-total, .financial-payback-value,
+.case-calculation-result strong, .case-payback dd { font-family: var(--font-heading); }
+h1, h2 { font-weight: 800; }
+#root h3 { font-weight: 700; }
+.brand { font-weight: 500; font-size: 25px; letter-spacing: -1.4px; }
+.footer-expanded .footer .brand-large { font-size: 108px; letter-spacing: -6px; }
+.hero h1 { font-size: 68px; line-height: 1.12; font-weight: 800; letter-spacing: -3px; }
+.hero-description { font-size: 19px; line-height: 1.6; max-width: 640px; }
+.hero-eyebrow { font-size: 19px; }
+.hero-tag { font-size: 12px; }
+.hero-caption { font-size: 11px; }
+.button { font-size: 17px; gap: 16px; }
+.nav { font-size: 14px; gap: 32px; }
+.header .button { font-size: 13px; }
+h2 { font-size: 62px; letter-spacing: -2.5px; line-height: 1.14; }
+.service h3 { font-size: 22px; line-height: 1.35; }
+.service p { font-size: 16px; line-height: 1.6; }
+.product-card h3 { font-size: 24px; line-height: 1.3; letter-spacing: -.9px; }
+.product-card p, .scenario-link { font-size: 16px; line-height: 1.55; }
+.section-heading > p { font-size: 16px; }
+.founder-copy h2 { font-size: 69px; font-weight: 500; letter-spacing: -3.3px; }
+.founder-copy h3 { font-size: 22px; }
+.founder-copy > p:last-child { font-size: 16px; line-height: 1.6; }
+.contact-strip h2 { font-size: 66px; line-height: 1.08; letter-spacing: -2.6px; }
+.contact-strip p, .contact-strip .button { font-size: 16px; }
+.case-section-title, .financial-title { font-size: 53px; letter-spacing: -2px; line-height: 1.15; }
+.case-card-title { font-size: 23px; line-height: 1.4; letter-spacing: -.8px; }
+.case-metric strong { font-size: 43px; letter-spacing: -1.5px; }
+.financial-total { font-size: 55px; letter-spacing: -1.7px; }
+.financial-payback-value { font-size: 34px; line-height: 1.35; }
+.financial-payback-unavailable { font-size: 24px; }
+.case-detail .case-detail-title, .modal h2 { font-size: 29px; line-height: 1.3; letter-spacing: -1px; }
+.case-calculation-result strong { font-size: 28px; }
+.case-payback dd { font-size: 21px; }
+.footer-meta { font-size: 13px; }
+.task-title, .launch-title, .delivery-title, .quality-title,
+.expand-section-heading h2, .expand-research h2, .expand-faq h2, .brief-intro h2 {
+  font-size: 53px; letter-spacing: -2px; line-height: 1.16;
+}
+.task-card-title { font-size: 27px; line-height: 1.4; }
+.expand-format h3 { font-size: 26px; line-height: 1.3; }
+.launch-step-title, .delivery-item-title, .quality-check-title { font-size: 21px; line-height: 1.4; }
+
+@media(max-width:1250px) {
+  .hero h1 { font-size: 65px; letter-spacing: -3px; }
+  .hero-description { max-width: 530px; font-size: 17px; }
+  .hero-eyebrow { font-size: 17px; }
+  h2 { font-size: 52px; }
+  .product-card h3 { font-size: 21px; }
+  .founder-copy h2 { font-size: 55px; letter-spacing: -2.7px; }
+  .contact-strip h2 { font-size: 54px; }
+  .contact-strip p, .contact-strip .button { font-size: 14px; }
+  .footer-expanded .footer .brand-large { font-size: 84px; }
+  .task-title, .launch-title, .delivery-title, .quality-title,
+  .expand-section-heading h2, .expand-research h2, .expand-faq h2, .brief-intro h2 { font-size: 46px; }
+  .case-section-title, .financial-title { font-size: 46px; }
+  .case-card-title { font-size: 21px; }
+  .case-metric strong { font-size: 38px; }
+  .financial-total { font-size: 47px; }
+}
+
+@media(max-width:1000px) {
+  .brand { font-size: 22px; }
+  .nav { font-size: 11px; gap: 17px; }
+  .header .button { font-size: 11px; padding-inline: 14px; }
+  .hero h1 { font-size: 54px; letter-spacing: -2.6px; }
+  .hero-description { max-width: 410px; font-size: 15px; }
+  .hero-eyebrow { font-size: 15px; }
+  .hero-actions .button { font-size: 13px; padding-inline: 19px; }
+  .hero-economics-link { font-size: 12px; }
+  h2 { font-size: 44px; letter-spacing: -1.8px; }
+  .service h3 { font-size: 18px; }
+  .service p { font-size: 14px; }
+  .product-card h3 { font-size: 17px; letter-spacing: -.7px; }
+  .product-card p, .scenario-link { font-size: 13px; }
+  .founder-copy h2 { font-size: 44px; letter-spacing: -2px; }
+  .founder-copy h3 { font-size: 17px; }
+  .founder-copy > p:last-child { font-size: 13px; }
+  .contact-strip h2 { font-size: 42px; }
+  .contact-strip p, .contact-strip .button { font-size: 12px; }
+  .footer-expanded .footer .brand-large { font-size: 64px; letter-spacing: -3.5px; }
+  .task-title, .launch-title, .delivery-title, .quality-title,
+  .expand-section-heading h2, .expand-research h2, .expand-faq h2, .brief-intro h2 { font-size: 39px; letter-spacing: -1.6px; }
+  .expand-faq h2 { font-size: 36px; }
+  .expand-format h3 { font-size: 21px; }
+  .financial-total { font-size: 57px; }
+  .case-metric strong { font-size: 32px; }
+  .case-card-title { font-size: 19px; }
+}
+
+@media(max-width:700px) {
+  .brand { font-size: 23px; }
+  .nav a { font-size: 15px; }
+  .hero h1 { font-size: clamp(24px,7.8vw,47px); letter-spacing: -1.35px; line-height: 1.16; }
+  .hero-eyebrow { font-size: 13px; }
+  .hero-tag { font-size: 10px; }
+  .hero-description { font-size: 15px; line-height: 1.6; }
+  .hero-caption { font-size: 9px; }
+  .hero-actions .button { font-size: 12px; padding-inline: 17px; }
+  .hero-economics-link { font-size: 12px; }
+  h2 { font-size: 33px; letter-spacing: -1.3px; }
+  .service h3 { font-size: 20px; }
+  .service p { font-size: 14px; }
+  .product-card h3 { font-size: 23px; }
+  .product-card p, .scenario-link { font-size: 15px; }
+  .section-heading > p { font-size: 15px; }
+  .founder-copy h2 { font-size: 42px; letter-spacing: -2px; }
+  .founder-copy h3 { font-size: 19px; }
+  .founder-copy > p:last-child { font-size: 15px; }
+  .contact-strip h2 { font-size: 35px; letter-spacing: -1.8px; }
+  .contact-strip p { font-size: 14px; }
+  .contact-strip .button { font-size: 13px; }
+  .footer-expanded .footer .brand-large { font-size: clamp(30px,8.9vw,55px); letter-spacing: -2px; }
+  .task-title, .launch-title, .delivery-title, .quality-title,
+  .expand-section-heading h2, .expand-research h2, .expand-faq h2, .brief-intro h2 { font-size: clamp(30px,8.2vw,36px); letter-spacing: -1.4px; }
+  .task-card-title { font-size: 23px; }
+  .expand-format h3 { font-size: 25px; }
+  .case-section-title, .financial-title { font-size: 31px; letter-spacing: -1.3px; }
+  .case-card-title { font-size: 20px; }
+  .case-metric strong { font-size: 33px; }
+  .financial-total { font-size: clamp(29px,8.2vw,45px); letter-spacing: -1px; }
+  .financial-payback-value { font-size: 30px; }
+  .financial-payback-unavailable { font-size: 22px; }
+  .financial-fieldset legend { font-size: 20px; }
+  .case-detail .case-detail-title, .modal h2 { font-size: 24px; letter-spacing: -.8px; }
+  .case-calculation-result strong { font-size: 25px; }
+  .case-payback dd { font-size: 19px; }
+}
+@media(max-width:360px) {
+  .founder-copy h2 { font-size: 34px; letter-spacing: -1.5px; }
+  .product-card h3 { font-size: 20px; }
+  .contact-strip h2 { font-size: 29px; letter-spacing: -1.3px; }
+}
+@media(min-width:1001px) and (max-width:1350px) {
+  .hero h1 { font-size: clamp(50px,5vw,66px); letter-spacing: -2.7px; }
+  .hero-visual { width: calc(50vw - 60px); height: calc(50vw - 60px); right: 0; top: 35px; }
+  .hero-description { max-width: min(610px,calc(55vw - 45px)); }
+}
+@media(min-width:701px) and (max-width:1000px) {
+  .hero { min-height: 640px; }
+  .hero-visual { width: 350px; height: 350px; right: 5px; top: 252px; }
+  .hero-description { max-width: 360px; }
+}

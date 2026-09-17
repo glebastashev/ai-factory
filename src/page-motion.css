@@ -1,0 +1,89 @@
+.reading-progress {
+  position: fixed;
+  z-index: 100;
+  inset: 0 0 auto;
+  height: 5px;
+  background: linear-gradient(90deg, #0757ff 0%, #468dff 80%, #b7f558 100%);
+  box-shadow: 0 0 10px #0757ff33;
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+}
+
+.art-cursor, .cursor-halo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  z-index: 120;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .16s ease;
+}
+.art-cursor.is-visible, .cursor-halo.is-visible { opacity: 1; }
+.art-cursor svg {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  left: -5.5px;
+  top: -5.5px;
+  overflow: visible;
+  fill: #8fcaff;
+  stroke: #f8fdff;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 3px #e1f3ff) drop-shadow(0 0 7px #9dd2ffbb);
+}
+.cursor-halo span {
+  display: block;
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: -9px;
+  top: -9px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f5fcffcc 0%, #b9e2ff66 32%, #a3d4ff18 62%, transparent 75%);
+  box-shadow: 0 0 12px 3px #acd6ff33;
+  filter: blur(1px);
+  transform: scale(1);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.cursor-halo.is-link span {
+  transform: scale(1.2);
+  box-shadow: 0 0 15px 4px #b9e6ff55;
+}
+.has-art-cursor, .has-art-cursor * { cursor: none !important; }
+.has-art-cursor :is(input, textarea, select, [contenteditable="true"], dialog, dialog *) { cursor: auto !important; }
+.has-art-cursor dialog :is(button, a, summary) { cursor: pointer !important; }
+
+.hero-tag::before {
+  content: '';
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  margin-right: 9px;
+  border-radius: 50%;
+  background: #386e16;
+  align-self: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-tag::before { animation: signal-pulse 2.8s ease-in-out infinite; }
+  .product-card, .founder-photo { transition: box-shadow .35s ease, border-color .35s ease; }
+  .product-card:hover { box-shadow: 0 14px 40px #0c438b14; }
+  .founder-photo:hover { border-color: #96b6ef; box-shadow: 0 12px 35px #0757ff0d; }
+}
+
+@keyframes signal-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 #386e1633; }
+  50% { box-shadow: 0 0 0 5px #386e1600; }
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .art-cursor, .cursor-halo { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: 0s !important; }
+}

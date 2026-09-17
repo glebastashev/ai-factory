@@ -11,11 +11,10 @@ const stages = [
 export function HeroProcess() {
   const scene = useRef(null);
   const [active, setActive] = useState(0);
-  const [focused, setFocused] = useState(false);
   const [visible, setVisible] = useState(true);
   const [pageVisible, setPageVisible] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(() => matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const running = !focused && visible && pageVisible && !reducedMotion;
+  const running = visible && pageVisible && !reducedMotion;
 
   useEffect(() => {
     const preference = matchMedia('(prefers-reduced-motion: reduce)');
@@ -57,11 +56,6 @@ export function HeroProcess() {
           </div>
         </div>;
       })}
-    </div>
-    <div className="process-controls" onFocusCapture={event => { if (event.target.matches(':focus-visible')) setFocused(true); }} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}>
-      <div className="process-steps" aria-label="Этапы процесса">
-        {stages.map((stage, index) => <button type="button" key={stage.title} className={active === index ? 'is-active' : ''} aria-label={`Показать этап: ${stage.title}`} aria-pressed={active === index} onClick={() => setActive(index)}><span className="process-step-dot" />{stage.title}</button>)}
-      </div>
     </div>
   </div>;
 }

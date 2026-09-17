@@ -13,29 +13,6 @@
 .hero--alternative .hero-eyebrow { font-size: 17px; }
 .hero-alternative { grid-column: 2; grid-row: 1; min-width: 0; width: 100%; --lab-cycle: 12s; }
 .hero-alternative-art { width: 100%; }
-.hero-alternative-controls {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: fit-content;
-  max-width: 100%;
-  padding: 10px 14px;
-  margin: 34px auto 0;
-  border: 1px solid #dce5f2;
-  border-radius: 16px;
-  background: #fff;
-}
-.alternative-stages { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px 16px; }
-.alternative-stages > span { display: inline-flex; align-items: center; gap: 7px; color: #233b62; font-size: 12px; font-weight: 500; line-height: 1.5; white-space: nowrap; }
-.alternative-stages i { width: 5px; height: 5px; border-radius: 50%; background: #a8bad6; }
-@media (prefers-reduced-motion: no-preference) {
-  .alternative-stages i { animation: alternative-stage 12s linear infinite; animation-delay: calc(var(--stage-index) * -8s); }
-  .hero-alternative-controls[data-running="false"] .alternative-stages i { animation-play-state: paused; }
-}
-@keyframes alternative-stage { 0%, 28%, 100% { background: #0757ff; box-shadow: 0 0 0 3px #0757ff13; } 36%, 92% { background: #a8bad6; box-shadow: none; } }
 @media (min-width: 1001px) and (max-width: 1250px) {
   .hero.hero--alternative { min-height: 640px; gap: 24px; padding-block: 46px 60px; }
   .hero--alternative .hero-description { font-size: 15px; }
@@ -54,6 +31,4 @@
   .hero--alternative h1 { font-size: clamp(24px, 7.8vw, 47px); letter-spacing: -1.35px; }
   .hero--alternative .hero-description { font-size: 15px; }
   .hero--alternative .hero-eyebrow { font-size: 13px; }
-  .hero-alternative-controls { margin-top: 28px; padding: 10px 12px; }
-  .alternative-stages { gap: 8px 12px; }
 }

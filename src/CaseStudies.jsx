@@ -122,7 +122,8 @@ export const caseStudies = [
   },
 ];
 
-export function CaseStudies({ onOpen }) {
+export function CaseStudies({ onOpen, projects = caseStudies }) {
+  const expanded = projects.length > 3;
   const track = useRef(null);
   const [edges, setEdges] = useState({ start: true, end: false });
   const updateEdges = () => {
@@ -140,17 +141,17 @@ export function CaseStudies({ onOpen }) {
     el?.scrollBy({ left: direction * (step + 20), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   };
   return (
-    <section id="projects" className="case-studies" aria-labelledby="case-studies-title">
+    <section id="projects" className={`case-studies${expanded ? ' case-studies--expanded' : ''}`} aria-labelledby="case-studies-title">
       <div className="case-container">
         <header className="case-heading">
           <div className="case-heading-copy">
             <p className="case-eyebrow">Сценарии внедрения</p>
             <h2 id="case-studies-title" className="case-section-title">ИИ в работе бизнеса</h2>
           </div>
-          <p className="case-intro">Три процесса с расчётом экономики. <br/>Откройте кейс, чтобы увидеть детали.</p>
+          <p className="case-intro">{expanded ? 'Пять задач с расчётом экономики.' : 'Три процесса с расчётом экономики.'} <br/>Откройте кейс, чтобы увидеть детали.</p>
         </header>
         <div className="case-grid" ref={track} onScroll={updateEdges} aria-label="Кейсы внедрения">
-          {caseStudies.map((project, index) => (
+          {projects.map((project, index) => (
             <article className={`case-card case-card-${project.imageKind}`} key={project.id}>
               <div className="case-card-topline">
                 <span className="case-category">{project.category}</span>
@@ -164,7 +165,7 @@ export function CaseStudies({ onOpen }) {
                 <h3 className="case-card-title">{project.title}</h3>
                 <p className="case-card-description">{project.cardSummary}</p>
                 <div className="case-card-outcome">
-                  <p className="case-metric"><strong>{project.metric}</strong><span>/ мес.</span></p>
+                  <p className="case-metric"><strong>{project.metric}</strong><span>{project.period || '/ мес.'}</span></p>
                   <p className="case-effect-label">{project.effectLabel}</p>
                   <p className="case-scale">{project.scale}</p>
                 </div>
@@ -176,7 +177,7 @@ export function CaseStudies({ onOpen }) {
           ))}
         </div>
         <div className="case-section-bottom">
-          <p className="case-section-note">Расчётные примеры. Эффект зависит от объёма и исходных показателей бизнеса.</p>
+          <p className="case-section-note">Расчётные примеры. Эффект зависит от объёма и исходных показателей бизнеса.{expanded && <span className="case-browse-hint">Все 5 кейсов доступны по стрелкам или свайпу.</span>}</p>
           <div className="case-carousel-controls" aria-label="Листать кейсы">
             <button type="button" onClick={() => move(-1)} disabled={edges.start} aria-label="Предыдущий кейс"><ArrowLeft size={20}/></button>
             <button type="button" onClick={() => move(1)} disabled={edges.end} aria-label="Следующий кейс"><ArrowRight size={20}/></button>
@@ -228,7 +229,7 @@ export function CaseStudyDetail({ project, onChoose }) {
           <h3 id={`${project.id}-economics`}>Экономика на заданных вводных</h3>
         </header>
         <table className="case-assumptions">
-          <caption>Допущения для расчёта за один месяц</caption>
+          <caption>{project.calculationPeriod || 'Допущения для расчёта за один месяц'}</caption>
           <thead><tr><th scope="col">Вводная</th><th scope="col">Значение</th></tr></thead>
           <tbody>
             {project.assumptions.map((row) => (
@@ -238,13 +239,26 @@ export function CaseStudyDetail({ project, onChoose }) {
         </table>
         <div className="case-calculation">
           <p className="case-calculation-formula">{project.formula}</p>
-          <p className="case-calculation-result"><strong>{project.metric}</strong><span>месячный эффект после текущих затрат</span></p>
+          <p className="case-calculation-result"><strong>{project.metric}</strong><span>{project.resultLabel || 'месячный эффект после текущих затрат'}</span></p>
         </div>
         <p className="case-effect-condition">{project.effectCondition}</p>
-        <p className="case-calculation-note">Эффект до налогов при заданном объёме. Окупаемость с выхода на этот объём.</p>
+        <p className="case-calculation-note">{project.calculationNote || 'Эффект до налогов при заданном объёме. Окупаемость с выхода на этот объём.'}</p>
       </section>
 
-      <section className="case-detail-section" aria-labelledby={`${project.id}-launch`}>
+      {project.review ? <>
+        <section className="case-detail-section case-model-review" aria-labelledby={`${project.id}-review`}>
+          <h3 id={`${project.id}-review`}>{project.review.title}</h3>
+          <p>{project.review.verdict}</p>
+          <dl className="case-sensitivity">
+            {project.review.scenarios.map(row => <div key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}
+          </dl>
+          {project.review.sources && <ul className="case-model-sources">{project.review.sources.map(source => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.title} <ArrowUpRight size={14} aria-hidden="true"/></a></li>)}</ul>}
+        </section>
+        <section className="case-detail-section" aria-labelledby={`${project.id}-pilot`}>
+          <h3 id={`${project.id}-pilot`}>С чего начнём проверку</h3>
+          <p>{project.review.verification}</p>
+        </section>
+      </> : <section className="case-detail-section" aria-labelledby={`${project.id}-launch`}>
         <h3 id={`${project.id}-launch`}>Запуск и окупаемость в модели</h3>
         <dl className="case-payback">
           <div><dt>Условный бюджет запуска</dt><dd>{formatRubles(project.launchCost)}</dd></div>
@@ -253,7 +267,7 @@ export function CaseStudyDetail({ project, onChoose }) {
         <p className="case-payback-formula">{formatRubles(project.launchCost)} ÷ {formatRubles(project.monthlyEffect)}/мес. = {String(project.paybackMonths).replace('.', ',')} мес.</p>
         <p>{project.launchScope}</p>
         <p className="case-payback-note">Окупаемость считается с выхода на расчётный режим. Стоимость запуска здесь служит допущением для примера; смету проекта согласуем после разбора задачи.</p>
-      </section>
+      </section>}
 
       <button className="case-choose-button" type="button" onClick={() => onChoose({ interest: project.interest, task: project.brief })}>
         Рассчитать на моих данных <ArrowRight size={21} aria-hidden="true" />

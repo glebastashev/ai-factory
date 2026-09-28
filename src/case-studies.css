@@ -204,3 +204,20 @@
   .case-payback { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { .case-studies .case-card, .case-open-button > span { transition: none; } }
+
+/* Only version two has the five-case collection and reviewed financial models. */
+.case-studies--expanded .case-carousel-controls { display: flex; }
+.case-browse-hint { display: block; margin-top: 3px; color: #405779; }
+.case-sensitivity { margin: 18px 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.case-sensitivity > div { padding: 14px 12px; background: #f1f5fb; border-radius: 8px; }
+.case-sensitivity dt { min-height: 36px; color: #536b8e; font-size: 11px; line-height: 1.6; }
+.case-sensitivity dd { margin: 10px 0 0; color: #0757ff; font-size: 17px; font-weight: 700; white-space: nowrap; }
+.case-model-sources { display: grid; gap: 9px; list-style: none; padding: 0; font-size: 11px; line-height: 1.6; }
+.case-model-sources a { color: #0757ff; text-decoration: underline; text-underline-offset: 3px; }
+.case-model-sources svg { display: inline; vertical-align: middle; }
+@media (max-width: 650px) {
+  .case-sensitivity { grid-template-columns: 1fr; }
+  .case-sensitivity > div { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .case-sensitivity dt { min-height: 0; }
+  .case-sensitivity dd { margin: 0; font-size: 15px; }
+}

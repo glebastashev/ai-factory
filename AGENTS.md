@@ -8,5 +8,6 @@
 - Section order begins hero, solutions, tasks, economics, products.
 - Preserve the Telegram-styled founder button and exact channel link/name already in App.
 - Model cases and calculator values are examples, not claims of completed client projects.
+- Version 2 includes the user-confirmed Yardestate agency project (site + content, 290,000 RUB, performed by a student trained by Max) and a 150,000 RUB content offer (30 videos + 30 carousels + 30 articles per package). These are prices, not savings. Its former 1C document case is replaced with AI sales-call analysis; do not invent a monthly financial result for it.
 - Use `assetUrl` and Vite base for public image paths so project-path deployment works.
 - Run `npm test` and `npm run build:pages`; verify all three HTML pages and their assets before publishing.

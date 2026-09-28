@@ -148,7 +148,7 @@ export function CaseStudies({ onOpen, projects = caseStudies }) {
             <p className="case-eyebrow">Сценарии внедрения</p>
             <h2 id="case-studies-title" className="case-section-title">ИИ в работе бизнеса</h2>
           </div>
-          <p className="case-intro">{expanded ? 'Пять задач с расчётом экономики.' : 'Три процесса с расчётом экономики.'} <br/>Откройте кейс, чтобы увидеть детали.</p>
+          <p className="case-intro">{expanded ? 'Пять задач для ИИ в бизнесе.' : 'Три процесса с расчётом экономики.'} <br/>Откройте кейс, чтобы увидеть детали.</p>
         </header>
         <div className="case-grid" ref={track} onScroll={updateEdges} aria-label="Кейсы внедрения">
           {projects.map((project, index) => (
@@ -165,7 +165,7 @@ export function CaseStudies({ onOpen, projects = caseStudies }) {
                 <h3 className="case-card-title">{project.title}</h3>
                 <p className="case-card-description">{project.cardSummary}</p>
                 <div className="case-card-outcome">
-                  <p className="case-metric"><strong>{project.metric}</strong><span>{project.period || '/ мес.'}</span></p>
+                  <p className="case-metric"><strong>{project.metric}</strong><span>{project.period ?? '/ мес.'}</span></p>
                   <p className="case-effect-label">{project.effectLabel}</p>
                   <p className="case-scale">{project.scale}</p>
                 </div>
@@ -177,7 +177,7 @@ export function CaseStudies({ onOpen, projects = caseStudies }) {
           ))}
         </div>
         <div className="case-section-bottom">
-          <p className="case-section-note">Расчётные примеры. Эффект зависит от объёма и исходных показателей бизнеса.{expanded && <span className="case-browse-hint">Все 5 кейсов доступны по стрелкам или свайпу.</span>}</p>
+          <p className="case-section-note">{expanded ? 'Проекты, услуги и сценарии внедрения. Состав работ и условия внутри карточек.' : 'Расчётные примеры. Эффект зависит от объёма и исходных показателей бизнеса.'}{expanded && <span className="case-browse-hint">Все 5 кейсов доступны по стрелкам или свайпу.</span>}</p>
           <div className="case-carousel-controls" aria-label="Листать кейсы">
             <button type="button" onClick={() => move(-1)} disabled={edges.start} aria-label="Предыдущий кейс"><ArrowLeft size={20}/></button>
             <button type="button" onClick={() => move(1)} disabled={edges.end} aria-label="Следующий кейс"><ArrowRight size={20}/></button>
@@ -188,20 +188,52 @@ export function CaseStudies({ onOpen, projects = caseStudies }) {
   );
 }
 
+function PricedCaseDetail({ project, onChoose }) {
+  return <article className="case-detail">
+    <p className="case-detail-eyebrow">{project.caseLabel} · {project.category}</p>
+    <h2 id="dialog-title" className="case-detail-title">{project.title}</h2>
+    <p className="case-detail-intro">{project.summary}</p>
+    <figure className="case-interface-figure">
+      <a href={project.projectUrl || assetUrl(project.image)} target="_blank" rel="noreferrer" aria-label={project.projectUrl ? 'Открыть сайт Yardestate' : 'Открыть скриншот в полном размере'}>
+        <img className="case-detail-art" src={assetUrl(project.image)} alt={project.imageAlt}/>
+      </a>
+      <figcaption>{project.projectUrl
+        ? <>Скриншот сайта <a href={project.projectUrl} target="_blank" rel="noreferrer">Yardestate.ru</a>.</>
+        : <>{project.imageSystem}. Пример рабочего инструмента из <a href={project.imageSource} target="_blank" rel="noreferrer">документации продукта</a>.</>}
+      </figcaption>
+    </figure>
+    {project.projectUrl && <a className="case-project-link" href={project.projectUrl} target="_blank" rel="noreferrer">Посмотреть сайт Yardestate <ArrowUpRight size={18} aria-hidden="true"/></a>}
+    <section className="case-economics case-price" aria-labelledby={`${project.id}-price`}>
+      <p className="case-detail-eyebrow">{project.pricing.label}</p>
+      <h3 id={`${project.id}-price`}>{project.pricing.title}</h3>
+      <p className="case-calculation-result"><strong>{formatRubles(project.pricing.amount)}</strong><span>{project.period}</span></p>
+      <p className="case-calculation-note">{project.pricing.note}</p>
+    </section>
+    {project.detailSections.map((section, index) => <section className="case-detail-section" key={section.title} aria-labelledby={`${project.id}-section-${index}`}>
+      <h3 id={`${project.id}-section-${index}`}>{section.title}</h3>
+      {section.text && <p>{section.text}</p>}
+      {section.items && <ul className="case-implementation">{section.items.map(item => <li key={item}>{item}</li>)}</ul>}
+      {section.links && <ul className="case-model-sources case-project-pages">{section.links.map(link => <li key={link.url}><a href={link.url} target="_blank" rel="noreferrer">{link.title} <ArrowUpRight size={14} aria-hidden="true"/></a></li>)}</ul>}
+    </section>)}
+    <button className="case-choose-button" type="button" onClick={() => onChoose({ interest: project.interest, task: project.brief })}>{project.cta} <ArrowRight size={21} aria-hidden="true"/></button>
+  </article>;
+}
+
 export function CaseStudyDetail({ project, onChoose }) {
   if (!project) return null;
+  if (project.pricing) return <PricedCaseDetail project={project} onChoose={onChoose}/>;
 
   return (
     <article className="case-detail">
-      <p className="case-detail-eyebrow">Модельный кейс · {project.category}</p>
+      <p className="case-detail-eyebrow">{project.caseLabel || 'Модельный кейс'} · {project.category}</p>
       <h2 id="dialog-title" className="case-detail-title">{project.title}</h2>
       <p className="case-detail-intro">{project.summary}</p>
-      <div className="case-detail-model-note"><CheckCircle size={22} aria-hidden="true" /><p>Модельный пример: суммы заданы для расчёта и требуют проверки на данных вашего бизнеса.</p></div>
+      <div className="case-detail-model-note"><CheckCircle size={22} aria-hidden="true" /><p>{project.modelNote || 'Модельный пример: суммы заданы для расчёта и требуют проверки на данных вашего бизнеса.'}</p></div>
       <figure className="case-interface-figure">
         <a href={assetUrl(project.image)} target="_blank" rel="noreferrer" aria-label="Открыть скриншот в полном размере">
           <img className="case-detail-art" src={assetUrl(project.image)} alt={project.imageAlt} />
         </a>
-        <figcaption>{project.imageSystem}. Пример интерфейса из <a href={project.imageSource} target="_blank" rel="noreferrer">документации продукта</a>. Скриншот иллюстрирует систему, расчёт выполнен отдельно.</figcaption>
+        <figcaption>{project.imageSystem}. Пример интерфейса из <a href={project.imageSource} target="_blank" rel="noreferrer">документации продукта</a>. {project.imageNote || 'Скриншот иллюстрирует систему, расчёт выполнен отдельно.'}</figcaption>
       </figure>
 
       <section className="case-detail-section" aria-labelledby={`${project.id}-task`}>
@@ -223,7 +255,19 @@ export function CaseStudyDetail({ project, onChoose }) {
         <p>{project.measurableResult}</p>
       </section>
 
-      <section className="case-economics" aria-labelledby={`${project.id}-economics`}>
+      {project.economicsPlan ? <section className="case-economics" aria-labelledby={`${project.id}-economics`}>
+        <header className="case-economics-header">
+          <p className="case-detail-eyebrow">Проверка на пилоте</p>
+          <h3 id={`${project.id}-economics`}>Как посчитаем эффект в рублях</h3>
+        </header>
+        <table className="case-assumptions">
+          <caption>Данные, которые нужны для расчёта</caption>
+          <thead><tr><th scope="col">Показатель</th><th scope="col">Источник</th></tr></thead>
+          <tbody>{project.economicsPlan.rows.map(row => <tr key={row.label}><th scope="row">{row.label}<span>{row.note}</span></th><td>{row.value}</td></tr>)}</tbody>
+        </table>
+        <div className="case-calculation"><p className="case-calculation-formula">{project.economicsPlan.formula}</p></div>
+        <p className="case-effect-condition">{project.economicsPlan.condition}</p>
+      </section> : <section className="case-economics" aria-labelledby={`${project.id}-economics`}>
         <header className="case-economics-header">
           <p className="case-detail-eyebrow">Прозрачный расчёт</p>
           <h3 id={`${project.id}-economics`}>Экономика на заданных вводных</h3>
@@ -243,15 +287,15 @@ export function CaseStudyDetail({ project, onChoose }) {
         </div>
         <p className="case-effect-condition">{project.effectCondition}</p>
         <p className="case-calculation-note">{project.calculationNote || 'Эффект до налогов при заданном объёме. Окупаемость с выхода на этот объём.'}</p>
-      </section>
+      </section>}
 
       {project.review ? <>
         <section className="case-detail-section case-model-review" aria-labelledby={`${project.id}-review`}>
           <h3 id={`${project.id}-review`}>{project.review.title}</h3>
           <p>{project.review.verdict}</p>
-          <dl className="case-sensitivity">
+          {project.review.scenarios && <dl className="case-sensitivity">
             {project.review.scenarios.map(row => <div key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}
-          </dl>
+          </dl>}
           {project.review.sources && <ul className="case-model-sources">{project.review.sources.map(source => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.title} <ArrowUpRight size={14} aria-hidden="true"/></a></li>)}</ul>}
         </section>
         <section className="case-detail-section" aria-labelledby={`${project.id}-pilot`}>

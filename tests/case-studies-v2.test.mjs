@@ -16,20 +16,34 @@ test('version two adds website and content without mutating versions one and thr
   assert.deepEqual(cases.slice(0, 2).map(c => c.id), ['multipage-website', 'content-production']);
   for (const c of cases) {
     assert.ok(c.imageSource.startsWith('https://'));
-    assert.ok(c.review.verification);
+    assert.ok(c.review?.verification || c.pricing);
     assert.equal(c.launchCost, undefined, 'no unsupported setup price');
     assert.equal(c.paybackMonths, undefined, 'no unsupported payback promise');
-    assert.equal(Number(c.metric.replace(/\D/g, '')), calculateCaseEffect(c.calculation));
+    if (c.calculation) assert.equal(Number(c.metric.replace(/\D/g, '')), calculateCaseEffect(c.calculation));
   }
 });
 
-test('website savings are per project; content counts all nine deliverables per interview', () => {
+test('Yardestate is a delivered agency project for 290000, not projected savings', () => {
   const [site, content] = buildVersionTwoCases(legacy);
+  assert.equal(site.projectUrl, 'https://yardestate.ru/');
+  assert.equal(site.pricing.amount, 290000);
   assert.equal(site.period, '/ проект');
   assert.equal(site.monthlyEffect, undefined);
-  assert.equal(site.effect, 180000);
-  assert.equal(content.monthlyEffect, 248000);
-  assert.equal(content.outputs.interviews * (content.outputs.clips + content.outputs.posts + content.outputs.emails), 144);
+  assert.equal(site.calculation, undefined);
+  assert.match(JSON.stringify(site.detailSections), /ученик/);
+  assert.match(JSON.stringify(site.detailSections), /Макс/);
+  assert.equal(content.monthlyEffect, undefined);
+});
+
+test('content offer is 30 videos, 30 carousels and 30 articles for a 150000 package', () => {
+  const c = buildVersionTwoCases(legacy).find(c => c.id === 'content-production');
+  assert.deepEqual(c.outputs, { clips: 30, carousels: 30, articles: 30 });
+  assert.equal(c.pricing.amount, 150000);
+  assert.equal(c.period, '/ пакет');
+  assert.equal(c.calculation, undefined);
+  assert.equal(c.effect, undefined);
+  assert.equal(c.monthlyEffect, undefined);
+  assert.doesNotMatch(JSON.stringify(c), /248[\s\u00a0]*000|144 материала|16 интервью/);
 });
 
 test('revised sales forecast covers running costs only after eight extra paid orders', () => {
@@ -40,11 +54,19 @@ test('revised sales forecast covers running costs only after eight extra paid or
   assert.equal(calculateCaseEffect({ ...c.calculation, targetConversion: .30 }), 780000);
 });
 
-test('document cost charges for every page and includes remaining human review', () => {
-  const c = buildVersionTwoCases(legacy).find(c => c.id === 'documents-1c');
-  assert.equal(c.monthlyEffect, 266000);
-  assert.equal(calculateCaseEffect({ ...c.calculation, pagesPerDocument: 1 }), 338000);
-  assert.equal(calculateCaseEffect({ ...c.calculation, pagesPerDocument: 3 }), 194000);
+test('call analysis replaces document processing without inventing a financial result', () => {
+  const cases = buildVersionTwoCases(legacy);
+  assert.ok(!cases.some(c => c.id === 'documents-1c'));
+  const c = cases.find(c => c.id === 'sales-call-analysis');
+  assert.ok(c);
+  assert.equal(c.calculation, undefined);
+  assert.equal(c.monthlyEffect, undefined);
+  assert.equal(c.period, '');
+  assert.doesNotMatch(c.metric, /₽/);
+  assert.ok(c.economicsPlan.rows.length >= 3);
+  assert.match(c.economicsPlan.formula, /маржа/i);
+  assert.match(c.economicsPlan.condition, /оплаченных/);
+  assert.match(c.brief, /звонк/);
 });
 
 test('support counts only fully resolved paid tickets as avoided costs', () => {

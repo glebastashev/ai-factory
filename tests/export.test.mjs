@@ -31,3 +31,29 @@ test('.htaccess compresses text and fonts and caches hashed bundles on Apache ho
   assert.match(rules, /ExpiresByType application\/javascript "access plus 1 year"/);
   assert.match(rules, /ExpiresByType text\/html "access plus 0 seconds"/);
 });
+
+test('.htaccess keeps the bot settings and stored leads out of reach', async () => {
+  const { buildHtaccess } = await import('../scripts/export-files.mjs');
+  const rules = buildHtaccess();
+  assert.match(rules, /<FilesMatch "\^lead-config[^"]*">[\s\S]*Require all denied[\s\S]*<\/FilesMatch>/);
+  assert.match(rules, /RedirectMatch 404 \/lead-data\//);
+});
+
+test('the export ships the lead handler and a settings template, never real settings', async () => {
+  const { mkdtempSync, existsSync, readFileSync, writeFileSync, mkdirSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const { copyLeadHandler } = await import('../scripts/export-files.mjs');
+  const repo = mkdtempSync(join(tmpdir(), 'repo-'));
+  mkdirSync(join(repo, 'server'));
+  writeFileSync(join(repo, 'server/send.php'), '<?php // handler');
+  writeFileSync(join(repo, 'server/lead-config.example.php'), '<?php return [];');
+  writeFileSync(join(repo, 'server/lead-config.php'), '<?php return ["bot_token" => "SECRET"];');
+  const site = mkdtempSync(join(tmpdir(), 'site-'));
+  copyLeadHandler(repo, site);
+  assert.ok(existsSync(join(site, 'send.php')));
+  assert.ok(existsSync(join(site, 'lead-config.example.php')));
+  assert.ok(!existsSync(join(site, 'lead-config.php')), 'real settings must never be exported');
+  assert.match(readFileSync(join(site, 'lead-data/.htaccess'), 'utf8'), /Require all denied/);
+  assert.match(readFileSync(join(site, 'lead-data/index.php'), 'utf8'), /http_response_code\(404\)/);
+});

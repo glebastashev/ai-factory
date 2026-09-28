@@ -20,3 +20,11 @@
 @media(max-width:360px){.hero h1{font-size:31px;letter-spacing:-1.6px}}
 
 .modal-controls{position:sticky;top:0;height:0;z-index:5}
+/* Lead form: hidden bot trap, consent checkbox, sending and error states. */
+.form-hp{position:absolute!important;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
+.contact-form .form-consent{display:flex;align-items:flex-start;gap:11px;font-weight:500;font-size:13px;line-height:1.5;color:#44597c}
+.contact-form .form-consent input{width:19px;height:19px;min-height:0;margin:1px 0 0;padding:0;flex:none;accent-color:var(--blue)}
+.contact-form .form-consent a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+.contact-form .button:disabled{opacity:.72;cursor:progress;transform:none}
+.form-success>.form-warning{color:#d0632c;margin-bottom:20px}
+.form-success .modal-actions+.modal-actions{margin-top:10px}

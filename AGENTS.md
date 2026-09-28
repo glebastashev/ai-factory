@@ -15,3 +15,5 @@
 - Search and AI metadata live in `scripts/seo.mjs` (title, description, Open Graph, schema.org, robots.txt, llms.txt). FAQ markup is generated from `questions` in `ExpansionSections.jsx`, so edit questions there only.
 - Production export: `SITE_URL=https://domain/ npm run build:export -- --out <dir>`. Without `SITE_URL` the export has no canonical address or sitemap. GitHub Pages prototypes are built with `noindex` so they never compete with the real site in search.
 - Images in `public/assets` are WebP sized to twice their largest on-page size; originals are in `design/source-images`, unused art in `design/unused-assets`. `npm test` fails on images over 400 KB or files nothing references.
+- All lead forms go through `ContactForm` in `App.jsx` and `src/lead.js`, which post to `send.php` (source in `server/`). The handler stores every lead before sending it to Telegram, so never make delivery the only copy. Keep the consent checkbox and the hidden `website` bot trap. Real settings (`lead-config.php`) and stored leads (`lead-data/`) never go into git or the export. `npm test` runs the PHP handler against a fake Telegram when PHP is installed.
+

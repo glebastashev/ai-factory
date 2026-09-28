@@ -1,5 +1,5 @@
 // Finds the assets a page can actually load: start from the HTML, follow JS and CSS by file name.
-import { readdirSync, readFileSync, rmSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 export function reachableAssets(indexHtml, files) {
@@ -53,5 +53,30 @@ export function buildHtaccess() {
     '  ExpiresByType image/jpeg "access plus 1 month"',
     '</IfModule>',
     '',
+    '# Bot settings and stored leads are never served, whatever the hosting setup.',
+    '<FilesMatch "^lead-config.*\\.php$">',
+    '  <IfModule mod_authz_core.c>',
+    '    Require all denied',
+    '  </IfModule>',
+    '  <IfModule !mod_authz_core.c>',
+    '    Deny from all',
+    '  </IfModule>',
+    '</FilesMatch>',
+    '<IfModule mod_alias.c>',
+    '  RedirectMatch 404 /lead-data/',
+    '</IfModule>',
+    '',
   ].join('\n');
+}
+
+const DENY_ALL = '<IfModule mod_authz_core.c>\n  Require all denied\n</IfModule>\n<IfModule !mod_authz_core.c>\n  Deny from all\n</IfModule>\n';
+
+// The handler and a settings template go to the site root. Real settings (lead-config.php) stay on the hosting
+// and are never part of the export, so re-uploading the site does not wipe the bot token.
+export function copyLeadHandler(repoRoot, siteDir) {
+  copyFileSync(join(repoRoot, 'server/send.php'), join(siteDir, 'send.php'));
+  copyFileSync(join(repoRoot, 'server/lead-config.example.php'), join(siteDir, 'lead-config.example.php'));
+  mkdirSync(join(siteDir, 'lead-data'), { recursive: true });
+  writeFileSync(join(siteDir, 'lead-data/.htaccess'), DENY_ALL);
+  writeFileSync(join(siteDir, 'lead-data/index.php'), '<?php http_response_code(404); exit; ?>\n');
 }

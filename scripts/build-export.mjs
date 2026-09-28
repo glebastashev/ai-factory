@@ -5,7 +5,7 @@ import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { buildBundles, clientDir, prerender, root } from './prerender.mjs';
 import { writeStaticFiles } from './seo.mjs';
-import { buildHtaccess, pruneAssets } from './export-files.mjs';
+import { buildHtaccess, copyLeadHandler, pruneAssets } from './export-files.mjs';
 
 const args = process.argv.slice(2);
 const siteUrl = process.env.SITE_URL || '';
@@ -28,6 +28,7 @@ cpSync(resolve(clientDir, 'version-2.html'), resolve(site, 'index.html'));
 writeStaticFiles(site, { siteUrl, data: seoData, lastmod: today });
 const pruned = pruneAssets(site);
 writeFileSync(resolve(site, '.htaccess'), buildHtaccess());
+copyLeadHandler(root, site);
 console.log(`Removed ${pruned.length} files the page never loads: ${pruned.join(', ')}`);
 
 const zip = spawnSync('zip', ['-qr', '-X', resolve(out, 'ai-factory-v2.zip'), '.', '-x', '.DS_Store', '*/.DS_Store'], { cwd: site, stdio: 'inherit' });
@@ -57,9 +58,16 @@ writeFileSync(resolve(out, 'Публикация.txt'), [
   ...address,
   'После публикации добавьте сайт в Яндекс Вебмастер и Google Search Console и отправьте туда адрес страницы.',
   '',
-  'ФОРМА НА САЙТЕ',
-  'Форма собирает бриф и позволяет скачать или скопировать его.',
-  'Отправка заявок в Telegram, почту или CRM пока не подключена.',
+  'ЗАЯВКИ В TELEGRAM',
+  'Все формы на сайте отправляют заявку в send.php. Он сохраняет её на хостинге и пересылает в Telegram @veermitor.',
+  'Нужен хостинг с PHP, с которого открывается Telegram. Проверено 28.09.2026: с Beget открывается, с REG.RU и большинства московских хостингов нет.',
+  '1. В Telegram откройте @BotFather, отправьте /newbot и получите токен бота.',
+  '2. @veermitor открывает этого бота и нажимает «Запустить». Сделайте это незадолго до проверки: бот находит получателя по сообщениям за последние сутки.',
+  '3. На хостинге скопируйте lead-config.example.php в lead-config.php и впишите токен. При желании укажите запасную почту.',
+  '4. Отправьте с сайта тестовую заявку. После первой доставленной заявки бот запоминает получателя навсегда.',
+  '5. Необязательно: в панели хостинга добавьте cron раз в 5 минут: php <путь к сайту>/send.php retry. Он дошлёт заявки, если Telegram был временно недоступен.',
+  'Все заявки хранятся на хостинге в lead-data/leads.php. Открывайте его в файловом менеджере: из браузера он не открывается.',
+  'Формы отправляют имя, контакт и задачу, поэтому в них есть согласие на обработку персональных данных со ссылкой на https://maxlusher.io/privacy.',
   '',
 ].join('\n'));
 console.log(`Export ready: ${out}`);

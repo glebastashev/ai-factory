@@ -7,3 +7,7 @@ revisions/
 .env
 .env.*
 !.env.example
+# Real bot settings and stored leads live only on the hosting.
+server/lead-config.php
+lead-config.php
+lead-data/

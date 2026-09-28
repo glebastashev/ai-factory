@@ -13,9 +13,9 @@ test('version two adds website and content without mutating versions one and thr
   assert.equal(JSON.stringify(legacy), before);
   assert.equal(cases.length, 5);
   assert.equal(new Set(cases.map(c => c.id)).size, 5);
-  assert.deepEqual(cases.slice(0, 2).map(c => c.id), ['multipage-website', 'content-production']);
-  // Support with order access goes before call analysis (user request, 28.09.2026).
-  assert.deepEqual(cases.slice(3).map(c => c.id), ['commerce-support', 'sales-call-analysis']);
+  // Card order confirmed by the user on 28.09.2026.
+  assert.deepEqual(cases.map(c => c.id), ['multipage-website', 'commerce-support', 'b2b-sales', 'content-production', 'sales-call-analysis']);
+
   for (const c of cases) {
     assert.ok(c.imageSource.startsWith('https://'));
     assert.ok(c.review?.verification || c.pricing);
@@ -26,7 +26,9 @@ test('version two adds website and content without mutating versions one and thr
 });
 
 test('Yardestate is a delivered agency project for 290000, not projected savings', () => {
-  const [site, content] = buildVersionTwoCases(legacy);
+  const cases = buildVersionTwoCases(legacy);
+  const site = cases.find(c => c.id === 'multipage-website');
+  const content = cases.find(c => c.id === 'content-production');
   assert.equal(site.projectUrl, 'https://yardestate.ru/');
   assert.equal(site.pricing.amount, 290000);
   assert.equal(site.period, '/ проект');

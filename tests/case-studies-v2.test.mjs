@@ -14,6 +14,8 @@ test('version two adds website and content without mutating versions one and thr
   assert.equal(cases.length, 5);
   assert.equal(new Set(cases.map(c => c.id)).size, 5);
   assert.deepEqual(cases.slice(0, 2).map(c => c.id), ['multipage-website', 'content-production']);
+  // Support with order access goes before call analysis (user request, 28.09.2026).
+  assert.deepEqual(cases.slice(3).map(c => c.id), ['commerce-support', 'sales-call-analysis']);
   for (const c of cases) {
     assert.ok(c.imageSource.startsWith('https://'));
     assert.ok(c.review?.verification || c.pricing);

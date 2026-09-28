@@ -87,3 +87,6 @@
   :root { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition-duration: 0s !important; }
 }
+
+/* Set by the inline guard on prerendered pages; PageMotion removes it once the entrance starts. */
+.motion-pending .hero-copy > * { opacity: 0; }

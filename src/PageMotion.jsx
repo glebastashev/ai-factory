@@ -47,10 +47,16 @@ export function PageMotion() {
     };
     const start = () => {
       stop();
-      if (preference.matches || !('IntersectionObserver' in window)) return;
-      if (window.scrollY < window.innerHeight / 2) {
+      const html = document.documentElement;
+      // Prerendered pages hide the hero copy until this entrance starts, so it never flashes.
+      const heroPending = html.classList.contains('motion-pending');
+      const reveal = () => html.classList.remove('motion-pending');
+      if (preference.matches || !('IntersectionObserver' in window)) { reveal(); return; }
+      const heroReady = heroPending || !html.hasAttribute('data-prerendered');
+      if (heroReady && window.scrollY < window.innerHeight / 2) {
         document.querySelectorAll('.hero-copy > *').forEach((element, index) => animate(element, index * 75));
       }
+      reveal();
       observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (!entry.isIntersecting) return;

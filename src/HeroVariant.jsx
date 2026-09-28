@@ -15,8 +15,8 @@ const variants = {
 export function HeroVariant({ variant }) {
   const host = useRef(null);
   const [visible, setVisible] = useState(true);
-  const [pageVisible, setPageVisible] = useState(() => !document.hidden);
-  const [reduced, setReduced] = useState(() => matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [pageVisible, setPageVisible] = useState(true);
+  const [reduced, setReduced] = useState(false);
   const { Scene, description } = variants[variant];
   const running = visible && pageVisible && !reduced;
 
@@ -24,6 +24,8 @@ export function HeroVariant({ variant }) {
     const preference = matchMedia('(prefers-reduced-motion: reduce)');
     const updatePreference = () => setReduced(preference.matches);
     const updateVisibility = () => setPageVisible(!document.hidden);
+    updatePreference();
+    updateVisibility();
     const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting));
     observer.observe(host.current);
     preference.addEventListener('change', updatePreference);

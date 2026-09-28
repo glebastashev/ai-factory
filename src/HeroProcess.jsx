@@ -13,7 +13,7 @@ export function HeroProcess() {
   const [active, setActive] = useState(0);
   const [visible, setVisible] = useState(true);
   const [pageVisible, setPageVisible] = useState(true);
-  const [reducedMotion, setReducedMotion] = useState(() => matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [reducedMotion, setReducedMotion] = useState(false);
   const running = visible && pageVisible && !reducedMotion;
 
   useEffect(() => {
@@ -22,6 +22,7 @@ export function HeroProcess() {
     const updateVisibility = () => setPageVisible(!document.hidden);
     preference.addEventListener('change', updatePreference);
     document.addEventListener('visibilitychange', updateVisibility);
+    updatePreference();
     updateVisibility();
     const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting));
     observer.observe(scene.current);
